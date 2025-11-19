@@ -1,0 +1,25 @@
+# ===== Step 3: Correlation Heatmap =====
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+agg_df = pd.read_csv("/Users/sreenithyam/Desktop/New Project/cow_day_diet_summary.csv")
+
+# Add targets (if not already included)
+target_cols = ['dmi_mean', 'avg_sorting_mean', 'screen1_mean', 'screen2_mean', 'screen3_mean', 'screen4_mean']
+
+# Keep numeric columns only
+corr_df = agg_df.select_dtypes(include='number')
+
+# Compute correlation
+corr_matrix = corr_df.corr()
+
+# Focus only on correlations between features and targets
+corr_subset = corr_matrix[target_cols].sort_index()
+
+plt.figure(figsize=(12, 8))
+sns.heatmap(corr_subset, annot=True, cmap='coolwarm', center=0)
+plt.title("Correlation Heatmap: Features vs Targets", fontsize=14)
+plt.tight_layout()
+plt.savefig("correlation_heatmap.png", dpi=300)
+plt.show()
